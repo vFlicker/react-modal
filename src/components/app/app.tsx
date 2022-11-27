@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { Modal } from './modal';
+import { Modal } from '../modal';
 
 export function App(): JSX.Element {
   const [showModal, setShowModal] = useState(false);

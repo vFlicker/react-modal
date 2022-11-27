@@ -1,5 +1,9 @@
 import { PropsWithChildren, useEffect } from 'react';
+
 import { EscKeyEvent } from '../../const';
+import { ReactPortal } from '../react-portal';
+
+import './styles.css';
 
 type ModalProps = PropsWithChildren<{
   isOpen: boolean;
@@ -27,11 +31,13 @@ export function Modal({
   if (!isOpen) return null;
 
   return (
-    <div className="modal">
-      <button onClick={handleClose} className="close-btn">
-        Close
-      </button>
-      <div className="modal-content">{children}</div>
-    </div>
+    <ReactPortal wrapperId="react-portal-modal-container">
+      <div className="modal">
+        <button onClick={handleClose} className="close-btn">
+          Close
+        </button>
+        <div className="modal-content">{children}</div>
+      </div>
+    </ReactPortal>
   );
 }
