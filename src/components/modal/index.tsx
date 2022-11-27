@@ -1,4 +1,5 @@
-import { PropsWithChildren, useEffect } from 'react';
+import { PropsWithChildren, useEffect, useRef } from 'react';
+import { CSSTransition } from 'react-transition-group';
 
 import { EscKeyEvent } from '../../const';
 import { ReactPortal } from '../react-portal';
@@ -15,6 +16,8 @@ export function Modal({
   isOpen,
   handleClose,
 }: ModalProps): JSX.Element | null {
+  const modalRef = useRef(null);
+
   useEffect(() => {
     const closeOnEscapeKey = (evt: KeyboardEvent) => {
       if (evt.key === EscKeyEvent.Escape || evt.key === EscKeyEvent.Esc) {
@@ -28,16 +31,24 @@ export function Modal({
     };
   }, [handleClose]);
 
-  if (!isOpen) return null;
-
   return (
     <ReactPortal wrapperId="react-portal-modal-container">
-      <div className="modal">
-        <button onClick={handleClose} className="close-btn">
-          Close
-        </button>
-        <div className="modal-content">{children}</div>
-      </div>
+      <CSSTransition
+        in={isOpen}
+        timeout={{ exit: 300 }}
+        unmountOnExit
+        classNames="modal"
+        nodeRef={modalRef}
+      >
+        <div className="modal" ref={modalRef}>
+          <div className="modal-inner">
+            <button onClick={handleClose} className="modal__btn close-btn">
+              Close
+            </button>
+            <div className="modal-content">{children}</div>
+          </div>
+        </div>
+      </CSSTransition>
     </ReactPortal>
   );
 }
